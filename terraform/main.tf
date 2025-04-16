@@ -41,11 +41,3 @@ resource "azurerm_kubernetes_cluster" "aks" {
     load_balancer_sku = "standard"
   }
 }
-
-resource "azurerm_role_assignment" "aks_acr_pull" {
-  principal_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-  role_definition_name = "AcrPull"
-  scope = azurerm_container_registry.acr.id
-
-  depends_on = [ azurerm_kubernetes_cluster.aks ]
-}
