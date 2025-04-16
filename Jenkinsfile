@@ -26,8 +26,10 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            steps {
-                bat "docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile ApiContainer"
+            dir('ApiContainer'){
+                steps {
+                    bat "docker build -t %IMAGE_NAME%:%IMAGE_TAG%"
+                }
             }
         }
 
