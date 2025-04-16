@@ -33,19 +33,17 @@ pipeline {
 
       stage('Terraform Init') {
            steps {
-               dir('terraform'){
-                bat 'terraform init '
-               }
+                bat '"%TERRAFORM_PATH%" -chdir=terraform init '
           }
     }
       stage('Terraform Plan & Apply') {
            steps {
-               dir('terraform'){
-                 bat 'terraform plan -out=tfplan'
-                 bat 'terraform apply -auto-approve'
-               }
+               
+               bat '"%TERRAFORM_PATH%" -chdir=terraform plan -out=tfplan'
+               bat '"%TERRAFORM_PATH%" -chdir=terraform apply -auto-approve tfplan'
            }
      }
+
         
         stage('Login to ACR') {
             steps {
