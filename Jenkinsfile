@@ -31,44 +31,22 @@ pipeline {
         //     }
         // }
 
-       stage('Terraform Init') {
-            steps {
-                withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
-                    bat """
-                    echo "Navigating to Terraform Directory: %TF_WORKING_DIR%"
-                    cd %TF_WORKING_DIR%
-                    echo "Initializing Terraform..."
-                    terraform init
-                    """
-                }
-            }
-        }
-
-        stage('Terraform Plan') {
-    steps {
-        withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
-            bat """
-            echo "Navigating to Terraform Directory: %TF_WORKING_DIR%"
-            cd %TF_WORKING_DIR%
-            terraform plan -out=tfplan
-            """
-        }
+      stage('Terraform Init') {
+           steps {
+               dir('terraform'){
+                bat 'terraform init '
+               }
+          }
     }
-}
-
-
-        stage('Terraform Apply') {
-    steps {
-        withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
-            bat """
-            echo "Navigating to Terraform Directory: %TF_WORKING_DIR%"
-            cd %TF_WORKING_DIR%
-            echo "Applying Terraform Plan..."
-            terraform apply -auto-approve tfplan
-            """
-        }
-    }
-}
+      stage('Terraform Plan & Apply') {
+           steps {
+               dir('terraform'){
+                 bat 'terraform plan -out=tfplan'
+                 bat 'terraform apply -auto-approve'
+               }
+           }
+     }
+        
         stage('Login to ACR') {
             steps {
                 bat "az acr login --name %ACR_NAME%"
