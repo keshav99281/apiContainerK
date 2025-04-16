@@ -25,11 +25,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps{
-                    bat "docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile ApiContainer"   
-            }
-        }
+        // stage('Build Docker Image') {
+        //     steps{
+        //             bat "docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile ApiContainer"   
+        //     }
+        // }
 
        stage('Terraform Init') {
             steps {
